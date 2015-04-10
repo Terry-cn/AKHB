@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<widget xmlns   = "http://www.w3.org/ns/widgets"
+        xmlns:gap   = "http://phonegap.com/ns/1.0"
+        id          = "com.phonegap.example"
+        versionCode = "11" 
+        version     = "1.1.5" >
+
+    <name>myAKHB</name>
+
+    <description>
+        Developed By Nova
+    </description>
+
+    <author href="http://phonegap.com" email="lict@novasoftware.cn">
+        Nova Team
+    </author>
+
+    <feature name="http://api.phonegap.com/1.0/device" />
+    <feature name="http://api.phonegap.com/1.0/network" />
+    <feature name="http://api.phonegap.com/1.0/camera" />
+    <feature name="http://api.phonegap.com/1.0/notification" />
+    <feature name="http://api.phonegap.com/1.0/geolocation" />
+    <feature name="http://api.phonegap.com/1.0/media" />
+    <feature name="http://api.phonegap.com/1.0/contacts" />
+    <feature name="http://api.phonegap.com/1.0/file" />
+    <feature name="http://api.phonegap.com/1.0/battery" />
+           
+    <preference name="target-device" value="universal" />
+    <preference name="Fullscreen" value="true" />
+    <preference name="StatusBarOverlaysWebView" value="true" />
+    <preference name="WebViewBounce" value="false" />
+    <preference name="DisallowOverscroll" value="true" />
+    <preference name="orientation" value="portrait"/>
+
+    <gap:platform name="ios" />
+    <gap:platform name="android" />
+
+    <gap:splash src="splash.png" />
+
+    <gap:plugin name="org.apache.cordova.device"/>
+    <gap:plugin name="org.apache.cordova.splashscreen"/>
+    <gap:plugin name="org.apache.cordova.dialogs"/>
+    <gap:plugin name="org.apache.cordova.network-information"/>
+    <gap:plugin name="org.apache.cordova.inappbrowser"/>
+    <gap:plugin name="de.appplant.cordova.plugin.email-composer"/>
+    <gap:plugin name="net.bgta.phonegap.plugin.appversion" version="1.1.1" />
+
+    <plugin name="InAppBrowser" value="CDVInAppBrowser" />
+    <plugin name="EmailComposer" value="APPEmailComposer" />
+    
+    <icon src="icon.png" />
+
+    <access origin="http://*"/>
+
+</widget>

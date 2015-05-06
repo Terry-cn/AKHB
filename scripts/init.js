@@ -53,7 +53,7 @@ module.controller('SlidingMenuController',['$scope',function($scope){
         $scope.isready = data;
     });
 }]);
-module.controller('LandingPageController',['$scope',function($scope){
+module.controller('LandingPageController',['$scope','$sce',function($scope,$sce){
     var scope = $scope;
     DB.getHomeArticle(function(err,result){
         console.log(result);
@@ -61,7 +61,7 @@ module.controller('LandingPageController',['$scope',function($scope){
             
             scope.$apply( function() {
                 $scope.hasMessage = count > 0;
-                $scope.article = result;
+                $scope.article = $sce.trustAsHtml(result.content);
             });
         });
         

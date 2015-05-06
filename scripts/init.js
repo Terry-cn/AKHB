@@ -89,9 +89,8 @@ module.controller('MessageListController',['$scope','$templateCache',function($s
 //{{moment(msg.last_modified).format('yyyy-MM-dd')}}
     DB.getMessages(function(err,messages){
         scope.$apply( function() {
-
             scope.messages = messages;
-             console.log(JSON.stringify(messages));
+            console.log(JSON.stringify(messages));
         });
     })
 }]);

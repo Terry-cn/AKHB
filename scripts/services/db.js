@@ -107,6 +107,7 @@ AKHB.services.db.prototype.getMessageById = function(id,callback){
 };
 
 AKHB.services.db.prototype.setMessage = function(tx,_message,callback){
+	console.log(_message);
 	this.getMessageById(_message.id,function(err,resultMessage){
 		if(!resultMessage){
 			var _mMessage = new message({
@@ -125,6 +126,7 @@ AKHB.services.db.prototype.setMessage = function(tx,_message,callback){
 				resultMessage.title= _message.title;
 				resultMessage.content= _message.content.replace(/\\\"/ig, "\"");
 				resultMessage.last_modified= _message.last_modified;
+				console.log("_message",_message.last_modified,_message);
 				resultMessage.type= _message.type;
 				resultMessage.status= _message.status;
 			}

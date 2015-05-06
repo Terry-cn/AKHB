@@ -72,7 +72,7 @@ AKHB.services.db.prototype.setArticle = function(tx,_article,callback){
 				server_id:_article.id,
 			  	title: _article.title,
 			  	content: _article.content.replace(/\\\"/ig, "\""),
-			  	last_modified: _article.last_modified,
+			  	last_modified: moment(_article.last_modified).toDate(),//_article.last_modified,
 			  	type:_article.type,
 			  	status:_article.status
 			});
@@ -83,7 +83,7 @@ AKHB.services.db.prototype.setArticle = function(tx,_article,callback){
 			}else{
 				resultArticle.title= _article.title;
 				resultArticle.content= _article.content.replace(/\\\"/ig, "\"");
-				resultArticle.last_modified= _article.last_modified;
+				resultArticle.last_modified= moment(_article.last_modified).toDate();
 				resultArticle.type= _article.type;
 				resultArticle.status= _article.status;
 			}
@@ -114,7 +114,7 @@ AKHB.services.db.prototype.setMessage = function(tx,_message,callback){
 				server_id:_message.id,
 			  	title: _message.title,
 			  	content: _message.content.replace(/\\\"/ig, "\""),
-			  	last_modified: _message.last_modified,
+			  	last_modified: moment(_message.last_modified).toDate(),
 			  	type:_message.type,
 			  	status:_message.status
 			});
@@ -125,8 +125,8 @@ AKHB.services.db.prototype.setMessage = function(tx,_message,callback){
 			}else{
 				resultMessage.title= _message.title;
 				resultMessage.content= _message.content.replace(/\\\"/ig, "\"");
-				resultMessage.last_modified= _message.last_modified;
-				console.log("_message",_message.last_modified,_message);
+				resultMessage.last_modified= moment(_message.last_modified).toDate();
+				//console.log("_message",_message.last_modified,_message);
 				resultMessage.type= _message.type;
 				resultMessage.status= _message.status;
 			}
@@ -165,7 +165,7 @@ AKHB.services.db.prototype.setNavigation = function(tx,_navigation,callback){
 			  	order_by: _navigation.order_by,
 			  	content: _navigation.content,
 			  	link: _navigation.link,
-			  	last_modified: _navigation.last_modified,
+			  	last_modified:  moment(_navigation.last_modified).toDate(),//_navigation.last_modified,
 			  	type:_navigation.type,
 			  	status:_navigation.status,
 			  	icon:_navigation.icon
@@ -177,7 +177,7 @@ AKHB.services.db.prototype.setNavigation = function(tx,_navigation,callback){
 			}else{
 				resultNavigation.title = _navigation.title;
 				//resultNnavigation.content(_navigation.content);
-				resultNavigation.last_modified = _navigation.last_modified;
+				resultNavigation.last_modified = moment(_navigation.last_modified).toDate();
 				resultNavigation.type = _navigation.type;
 				resultNavigation.status = _navigation.status;
 				resultNavigation.content = _navigation.content;

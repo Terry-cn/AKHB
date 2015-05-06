@@ -1,7 +1,7 @@
 
 persistence.store.websql.config(persistence, 'AKHB', 'AKHB db', 5 * 1024 * 1024);
 //persistence.store.memory.config(persistence);
-persistence.debug = false;
+persistence.debug = true;
 
 
 var sync = persistence.define('sync', {

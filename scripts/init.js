@@ -292,7 +292,7 @@ module.controller('ContentController',['$scope','$http','$templateCache','$sce',
 
         console.log('ContentController',$scope.$id);
         var article = $templateCache.get('article');
-        var rootScope = $rootScope;
+        window.rootScope = $rootScope;
         $scope.article = article;
         if(article.type==2){
             if(!Auth.isNetworkConnected()){
@@ -308,11 +308,13 @@ module.controller('ContentController',['$scope','$http','$templateCache','$sce',
 
                 article.content +='uuid='+AKHB.user.id;
                 $scope.contentHTML = $sce.trustAsHtml('<iframe name="contentFrame" id="content-iframe" src="'+article.content +'" ng-if="article.type==2"></iframe>');
-                rootScope.$emit("BUSY");
+                $rootScope.$emit("BUSY");
                 //$scope.contentHTML = $sce.trustAsHtml('<iframe name="contentFrame" id="content-iframe" src="http://127.0.0.1/akhb/" ng-if="article.type==2"></iframe>');
                 setTimeout(function(){
-                    rootScope.$emit("NOTBUSY");
-                },2000);
+                    $('div.loading').addClass('ng-hide');
+                },3000);
+ //window.rootScope.$emit("NOTBUSY");
+                
                 //$scope.contentHTML = $sce.trustAsHtml('<iframe id="content-iframe" src="http://127.0.0.1" ng-if="article.type==2"></iframe>');
                 // $rootScope.$emit("BUSY");
                 // console.log($('#content-iframe'));

@@ -12,6 +12,7 @@
                 <ons-list-item  class="plan" ng-repeat="msg in messages" ng-click="openMessageDetail(msg)">
                     <ons-row class="borderSet">
                         <ons-col width="80px" class="plan-left">
+                            {{msg.last_modified}}
                             <div class="plan-date" id="plan-date1" ng-bind-html="msg.last_modified | formatTime">
                                 
                             </div>

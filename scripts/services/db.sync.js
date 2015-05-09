@@ -112,6 +112,7 @@ AKHB.services.db.DBSync =  (function(){
 							if(result.response == 1){    
 								var lastModified;
 								async.each(result.content,function(_message,callback){
+									_message.read = 0;
 									try{
 										dbServices.setMessage(true,_message,callback);
 									}catch(err){
@@ -139,7 +140,7 @@ AKHB.services.db.DBSync =  (function(){
 									console.log(messsage);
 									if(messsage){
 										AKHB.notification.alert(messsage.content,function(){
-											messsage.type = 2;
+											messsage.read = 1;
 											persistence.flush(null,function() {
 												if(callback && typeof callback == 'function') callback(null,result);
 											});
@@ -219,7 +220,48 @@ AKHB.services.db.DBSync =  (function(){
 				});
 			
 		}
+		this.syncUsage = function(callback,tx){
+			var url = remoteAddress+'/webservice.php?tpe=3';
+			function sendUsage(type,callback){
+				DB.getUsage(type,function(err,data){
+					var request = [];
+					$.each(data,function(index,_usage){
+						
+						request.push({
+							type:_usage.type,
+							id:AKHB.user.id,
+							content_id:_usage.content_id,
+							date_time:moment(_usage.date_time).format('YYYY-MM-DD')
+						});
+					});
+					$.post(url,{
+						type:3,
+						usage:request
+					},function(res, textStatus, jqXHR){
 
+						if(textStatus=="success"){
+							$.each(data,function(index,_usage){
+								persistence.remove(_usage);
+							});
+						}
+					});
+					callback(null);
+				});
+			}
+			async.series([
+				function(callback){
+					sendUsage(1,callback);
+				},
+				function(callback){
+					sendUsage(2,callback);
+				}
+			],function(err){
+				persistence.flush(null,function() {
+				  callback(err);
+				});
+				
+			});
+		};
 		this.runInBackGround = function(callback){
 			var self = this;
 			async.series([
@@ -235,6 +277,11 @@ AKHB.services.db.DBSync =  (function(){
 				},
 				function(callback){
 					self.syncMessage(function(){
+						callback(null);
+					},true);
+				},
+				function(callback){
+					self.syncUsage(function(){
 						callback(null);
 					},true);
 				}

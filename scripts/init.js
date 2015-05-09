@@ -4,6 +4,7 @@ var MSG_RETUIREDNETWORK = {title:'Internet Connection',content:'Sorry, a network
 var MSG_LOGINFAILED = {title:'Incorrect Password',content:'Please check password and try again.'};
 var MSG_SYSTEMERROR = {title:'System Error',content:'There has been an error,Please contact a member of the Aga Khan Health Board. \r\n Error Code:{0}'};
 
+var pushNotification;
 var module = ons.bootstrap('AKHB', ['onsen']);
 AKHB.user = { id:null, authcode:null,appVersion:'1.0'};
 
@@ -28,6 +29,8 @@ AKHB.openContentPage =  function(navigation,$templateCache){
 
 module.controller('AppController',['$scope','$rootScope',function($scope,$rootScope){
     //var scope = $scope;
+    
+
     $rootScope.$on("BUSY", function(){ 
         $scope.busy = true;
         $scope.waitNetwork = false;
@@ -43,7 +46,122 @@ module.controller('AppController',['$scope','$rootScope',function($scope,$rootSc
         $scope.waitNetwork = true;
         console.log('emit WAITINGNETWORK',$scope.busy,$scope.$id);
     });
+    
+    if(!window.plugins.pushNotification) return;
 
+    pushNotification = window.plugins.pushNotification;
+    //regist notification
+    if ( device.platform == 'android' || device.platform == 'Android' || device.platform == "amazon-fireos" ){
+        pushNotification.register(
+        successHandler,
+        errorHandler,
+        {
+            "senderID":window.AKHB.config.senderID,
+            "ecb":"onNotification"
+        });
+    } else if ( device.platform == 'blackberry10'){
+        // pushNotification.register(
+        // successHandler,
+        // errorHandler,
+        // {
+        //     invokeTargetId : "replace_with_invoke_target_id",
+        //     appId: "replace_with_app_id",
+        //     ppgUrl:"replace_with_ppg_url", //remove for BES pushes
+        //     ecb: "pushNotificationHandler",
+        //     simChangeCallback: replace_with_simChange_callback,
+        //     pushTransportReadyCallback: replace_with_pushTransportReady_callback,
+        //     launchApplicationOnPush: true
+        // });
+    } else {
+        pushNotification.register(
+        tokenHandler,
+        errorHandler,
+        {
+            "badge":"true",
+            "sound":"true",
+            "alert":"true",
+            "ecb":"onNotificationAPN"
+        });
+    }
+    function tokenHandler (result) {
+        // Your iOS push server needs to know the token before it can push to this device
+        // here is where you might want to send it the token for later use.
+        //alert('device token = ' + result);
+        sendRegistionId(result);
+    }
+    // result contains any message sent from the plugin call
+    function successHandler (result) {
+       // alert('result = ' + result);
+       sendRegistionId(result);
+    }
+    // result contains any error description text returned from the plugin call
+    function errorHandler (error) {
+        alert('error = ' + error);
+    }
+    function sendRegistionId(id){
+        var url = window.AKHB.config.remoteAddress+'/webservice.php?tpe=4&deviceid='+AKHB.user.deviceid+'&notificationid='+id;
+        $.get(url,function(data){
+            console.log('sendRegistionId',id,data);
+        })
+    }
+    // iOS
+    function onNotificationAPN (event) {
+        if ( event.alert )
+        {
+            navigator.notification.alert(event.alert);
+        }
+
+        if ( event.sound )
+        {
+            var snd = new Media(event.sound);
+            snd.play();
+        }
+
+        if ( event.badge )
+        {
+            pushNotification.setApplicationIconBadgeNumber(successHandler, errorHandler, event.badge);
+        }
+    }
+
+    //Android and Amazon Fire OS 
+    function onNotification(e) {
+       $("#app-status-ul").append('<li>EVENT -> RECEIVED:' + e.event + '</li>');
+
+        switch( e.event )
+        {
+        case 'registered':
+            if ( e.regid.length > 0 )
+            {
+                console.log("regID = " + e.regid);
+            }
+        break;
+
+        case 'message':
+            // if this flag is set, this notification happened while we were in the foreground.
+            // you might want to play a sound to get the user's attention, throw up a dialog, etc.
+            if ( e.foreground )
+            {
+
+                // on Android soundname is outside the payload.
+                // On Amazon FireOS all custom attributes are contained within payload
+                var soundfile = e.soundname || e.payload.sound;
+                // if the notification contains a soundname, play it.
+                var my_media = new Media("/android_asset/www/"+ soundfile);
+                my_media.play();
+            }
+            alert('message = '+e.message+' msgcnt = '+e.msgcnt);
+
+        break;
+
+        case 'error':
+           alert('GCM error = '+e.msg);
+        break;
+
+        default:
+            alert('An unknown GCM event has occurred');
+        break;
+      }
+    }
 
 }]);
 
@@ -61,6 +179,7 @@ module.controller('LandingPageController',['$scope','$sce',function($scope,$sce)
             
             scope.$apply( function() {
                 $scope.hasMessage = count > 0;
+                $scope.title = $sce.trustAsHtml(result.title);
                 $scope.article = $sce.trustAsHtml(result.content);
             });
         });
@@ -295,6 +414,7 @@ module.controller('ContentController',['$scope','$http','$templateCache','$sce',
         var article = $templateCache.get('article');
         window.rootScope = $rootScope;
         $scope.article = article;
+        DB.setUsage(article.server_id,1);
         if(article.type==2){
             if(!Auth.isNetworkConnected()){
                 $scope.contentHTML = $sce.trustAsHtml("<p class=empty-content>"+MSG_RETUIREDNETWORK.content+"</p>");
@@ -314,7 +434,11 @@ module.controller('ContentController',['$scope','$http','$templateCache','$sce',
                 setTimeout(function(){
                     $('div.loading').addClass('ng-hide');
                 },3000);
- //window.rootScope.$emit("NOTBUSY");
+                //window.rootScope.$emit("NOTBUSY");
+                var timer = setInterval(function(){
+                    if(window.contentFrame && window.contentFrame.readyState == 'complete')
+                        $('div.loading').addClass('ng-hide');
+                },1000);
                 
                 //$scope.contentHTML = $sce.trustAsHtml('<iframe id="content-iframe" src="http://127.0.0.1" ng-if="article.type==2"></iframe>');
                 // $rootScope.$emit("BUSY");
@@ -347,11 +471,12 @@ module.controller('MessageDetailController',['$scope','$http','$templateCache','
 
         var message = $templateCache.get('message');
         $scope.message = message;
-        if(message.type == 1){
-            DB.setMessageUsed(message.server_id,function(err,result){
-                console.log(err,result);
-            });
-        }
+        DB.setUsage(message.server_id,2);
+        // if(message.type == 1){
+        //     DB.setMessageUsed(message.server_id,function(err,result){
+        //         console.log(err,result);
+        //     });
+        // }
 }]);
 $(document).on('click','a',function(e){
 

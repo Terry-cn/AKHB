@@ -37,8 +37,16 @@ var message = persistence.define('messages', {
     last_modified: "DATE",
     content: "TEXT",
     type:"INT",
-    status:"INT"
+    status:"INT",
+    read:"INT"
 });
+
+var usage = persistence.define('usages', {
+    content_id: "TEXT",
+    type:"INT",
+    date_time:"DATE"
+});
+
 
 persistence.schemaSync(function(tx){
      console.log("Update schema success.");

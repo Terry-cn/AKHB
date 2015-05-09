@@ -219,14 +219,25 @@ AKHB.services.db.prototype.getMessages = function(callback){
 };
 AKHB.services.db.prototype.getMessageCount = function(callback){
 	var mMessages = message.all();
-	mMessages.filter('status','=','0')
-	.and(new persistence.PropertyFilter('type','=','1'))
+	mMessages.filter('read','=','0')
 	.count(null,function(count){
 		callback(false,count);
 	});
 };
+AKHB.services.db.prototype.getActiveMessageCount = function(callback){
+	var mMessages = message.all();
+	mMessages.filter('type','=','2')
+	.and(new persistence.PropertyFilter('read','=','0'))
+	.count(null,function(count){
+		callback(false,count);
+	});
+};
+
 AKHB.services.db.prototype.getLatestActiveMessage = function(callback){
-	var mMessages = message.all().filter('type','=','1').order('server_id',false);
+	var mMessages = message.all()
+	.filter('type','=','2')
+	.and(new persistence.PropertyFilter('read','=','0'))
+	.order('server_id',false);
 	mMessages.one(null,function(message){
 		callback(false,message);
 	})
@@ -241,7 +252,21 @@ AKHB.services.db.prototype.setMessageUsed = function(id,callback){
 		});
 	})
 };
-
+AKHB.services.db.prototype.setUsage = function(id,type,callback){
+	var _usage = new usage({
+		type:type,
+		content_id:id,
+		date_time:new Date()
+	});
+	persistence.add(_usage);
+	persistence.flush();
+};
+AKHB.services.db.prototype.getUsage = function(type,callback){
+	var usages = usage.all().filter('type','=',type).limit(30);
+	usages.list(function(data){
+		callback(null,data);
+	})
+};
 
 AKHB.services.db.prototype.getNavigations = function(callback){
 	var mNavigations = navigation.all();

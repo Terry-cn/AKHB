@@ -4,6 +4,7 @@ window.AKHB ={
 		remoteAddress : 'http://stage.iiuk.homeip.net/Pages/HealthBoard_App',
 		debug:true,
 		version:null,
-		timeout:20000
+		timeout:20000,
+		senderID:824841663931
 	}
 };

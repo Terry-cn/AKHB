@@ -162,7 +162,7 @@ module.controller('AppController',['$scope','$rootScope',function($scope,$rootSc
             break;
           }
         }
-    }cath(ex){
+    }catch(ex){
         console.log(ex);
     }
 

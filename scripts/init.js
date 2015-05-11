@@ -46,7 +46,7 @@ module.controller('AppController',['$scope','$rootScope',function($scope,$rootSc
         $scope.waitNetwork = true;
         console.log('emit WAITINGNETWORK',$scope.busy,$scope.$id);
     });
-
+    console.log(window,window.plugins);
     if(!window.plugins || !window.plugins.pushNotification) return;
     try{
         pushNotification = window.plugins.pushNotification;

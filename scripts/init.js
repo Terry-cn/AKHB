@@ -46,9 +46,10 @@ module.controller('AppController',['$scope','$rootScope',function($scope,$rootSc
         $scope.waitNetwork = true;
         console.log('emit WAITINGNETWORK',$scope.busy,$scope.$id);
     });
-    console.log(window,window.plugins);
+    console.log("AppController",window,window.plugins);
     if(!window.plugins || !window.plugins.pushNotification) return;
     try{
+        console.log("pushNotification start");
         pushNotification = window.plugins.pushNotification;
         //regist notification
         if ( device.platform == 'android' || device.platform == 'Android' || device.platform == "amazon-fireos" ){
@@ -163,7 +164,7 @@ module.controller('AppController',['$scope','$rootScope',function($scope,$rootSc
           }
         }
     }catch(ex){
-        console.log(ex);
+        console.log("Notification error:",ex);
     }
 
 }]);

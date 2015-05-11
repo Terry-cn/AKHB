@@ -46,6 +46,9 @@ module.controller('AppController',['$scope','$rootScope',function($scope,$rootSc
         $scope.waitNetwork = true;
         console.log('emit WAITINGNETWORK',$scope.busy,$scope.$id);
     });
+    setTimeout(function(){
+
+
     console.log("AppController",window,window.plugins);
     if(!window.plugins || !window.plugins.pushNotification) return;
     try{
@@ -167,6 +170,8 @@ module.controller('AppController',['$scope','$rootScope',function($scope,$rootSc
         console.log("Notification error:",ex);
     }
 
+    //---------
+    },5000);
 }]);
 
 module.controller('SlidingMenuController',['$scope',function($scope){

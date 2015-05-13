@@ -437,7 +437,11 @@ module.controller('ContentController',['$scope','$http','$templateCache','$sce',
                     article.content += '?';
 
                 article.content +='uuid='+AKHB.user.id;
-                var ref = window.open(article.content,'_blank');
+                var ref = window.open(article.content,'_blank','location=yes');
+                //exit
+                ref.addEventListener('exit', function() { 
+                    myNavigator.popPage();
+                });
                 //$scope.contentHTML = $sce.trustAsHtml('<iframe name="contentFrame" id="content-iframe" src="'+article.content +'" ng-if="article.type==2"></iframe>');
 
                 //$scope.contentHTML = $sce.trustAsHtml('<iframe id="content-iframe" src="http://127.0.0.1" ng-if="article.type==2"></iframe>');

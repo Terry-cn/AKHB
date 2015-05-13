@@ -439,12 +439,7 @@ module.controller('ContentController',['$scope','$http','$templateCache','$sce',
                 article.content +='uuid='+AKHB.user.id;
                 var ref = window.open(article.content,'_blank');
                 //$scope.contentHTML = $sce.trustAsHtml('<iframe name="contentFrame" id="content-iframe" src="'+article.content +'" ng-if="article.type==2"></iframe>');
-                $rootScope.$emit("BUSY");
-                //$scope.contentHTML = $sce.trustAsHtml('<iframe name="contentFrame" id="content-iframe" src="http://127.0.0.1/akhb/" ng-if="article.type==2"></iframe>');
-                ref.addEventListener('loadstop', function() { 
-                    $('div.loading').addClass('ng-hide');
-                });
-                
+
                 //$scope.contentHTML = $sce.trustAsHtml('<iframe id="content-iframe" src="http://127.0.0.1" ng-if="article.type==2"></iframe>');
                 // $rootScope.$emit("BUSY");
                 // console.log($('#content-iframe'));

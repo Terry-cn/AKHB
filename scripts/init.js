@@ -437,7 +437,8 @@ module.controller('ContentController',['$scope','$http','$templateCache','$sce',
                     article.content += '?';
 
                 article.content +='uuid='+AKHB.user.id;
-                $scope.contentHTML = $sce.trustAsHtml('<iframe name="contentFrame" id="content-iframe" src="'+article.content +'" ng-if="article.type==2"></iframe>');
+                window.open(article.content,'_self');
+                //$scope.contentHTML = $sce.trustAsHtml('<iframe name="contentFrame" id="content-iframe" src="'+article.content +'" ng-if="article.type==2"></iframe>');
                 $rootScope.$emit("BUSY");
                 //$scope.contentHTML = $sce.trustAsHtml('<iframe name="contentFrame" id="content-iframe" src="http://127.0.0.1/akhb/" ng-if="article.type==2"></iframe>');
                 setTimeout(function(){
@@ -467,6 +468,7 @@ module.controller('ContentController',['$scope','$http','$templateCache','$sce',
         }else{
 
             $scope.contentHTML = $sce.trustAsHtml(article.content);
+
         }
         DB.getMessageCount(function(err,count){
              $scope.$apply( function() {
@@ -500,6 +502,8 @@ $(document).on('click','a',function(e){
                 window.plugin.email.open({
                     to:[$href.substring(7)]
                 });
+            }else{
+                 window.open( $href, '_system', 'location=yes');
             }
         } 
 })

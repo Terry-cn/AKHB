@@ -56,6 +56,5 @@
     
     <icon src="icon.png" />
 
-    <access origin="http://*"/>
-
+    <access origin="*"/>
 </widget>

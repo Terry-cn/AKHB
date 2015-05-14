@@ -450,7 +450,10 @@ module.controller('ContentController',['$scope','$http','$templateCache','$sce',
                 $scope.contentHTML = $sce.trustAsHtml('<iframe name="contentFrame" id="content-iframe" src="'+article.content +'" ng-if="article.type==2"></iframe>');
 
                 //$scope.contentHTML = $sce.trustAsHtml('<iframe id="content-iframe" src="http://127.0.0.1" ng-if="article.type==2"></iframe>');
-                // $rootScope.$emit("BUSY");
+                $rootScope.$emit("BUSY");
+                setTimeout(function(){
+                    $('div.loading').addClass('ng-hide');
+                },5000);
                 // console.log($('#content-iframe'));
                 // setTimeout(function(){
                 //     var iframe =  $('#content-iframe')[0];

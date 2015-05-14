@@ -437,12 +437,17 @@ module.controller('ContentController',['$scope','$http','$templateCache','$sce',
                     article.content += '?';
 
                 article.content +='uuid='+AKHB.user.id;
-                var ref = window.open(article.content,'_blank','location=yes');
-                //exit
-                ref.addEventListener('exit', function() { 
-                    myNavigator.popPage();
-                });
-                //$scope.contentHTML = $sce.trustAsHtml('<iframe name="contentFrame" id="content-iframe" src="'+article.content +'" ng-if="article.type==2"></iframe>');
+
+                //用插件打開
+                //------------------------------------------------------------------------
+                // var ref = window.open(article.content,'_blank','location=yes');
+                // //exit
+                // ref.addEventListener('exit', function() { 
+                //     myNavigator.popPage();
+                // });
+                //------------------------------------------------------------------------
+
+                $scope.contentHTML = $sce.trustAsHtml('<iframe name="contentFrame" id="content-iframe" src="'+article.content +'" ng-if="article.type==2"></iframe>');
 
                 //$scope.contentHTML = $sce.trustAsHtml('<iframe id="content-iframe" src="http://127.0.0.1" ng-if="article.type==2"></iframe>');
                 // $rootScope.$emit("BUSY");
@@ -476,6 +481,7 @@ module.controller('MessageDetailController',['$scope','$http','$templateCache','
 
         var message = $templateCache.get('message');
         $scope.message = message;
+        message.read = 1;
         DB.setUsage(message.server_id,2);
         // if(message.type == 1){
         //     DB.setMessageUsed(message.server_id,function(err,result){

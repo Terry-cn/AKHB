@@ -221,7 +221,7 @@ AKHB.services.db.DBSync =  (function(){
 			
 		}
 		this.syncUsage = function(callback,tx){
-			var url = remoteAddress+'/webservice.php?tpe=3';
+			var url = remoteAddress+'/webservice.php?type=3';
 			function sendUsage(type,callback){
 				DB.getUsage(type,function(err,data){
 					var request = [];

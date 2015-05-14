@@ -103,7 +103,7 @@ module.controller('AppController',['$scope','$rootScope',function($scope,$rootSc
             alert('error = ' + error);
         }
         function sendRegistionId(id){
-            var url = window.AKHB.config.remoteAddress+'/webservice.php?tpe=4&deviceid='+AKHB.user.deviceid+'&notificationid='+id;
+            var url = window.AKHB.config.remoteAddress+'/webservice.php?type=4&deviceid='+AKHB.user.deviceid+'&notificationid='+id;
             $.get(url,function(data){
                 console.log('sendRegistionId',id,data);
             })

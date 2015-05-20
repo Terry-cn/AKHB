@@ -31,6 +31,12 @@
      -->
 </head>
     <body ng-controller="AppController" ng-init="busy=true">
+        <div id="home">
+            <div id="app-status-div">
+                <ul id="app-status-ul">
+                </ul>
+            </div>
+        </div>
         <div class="loading" ng-show="busy"> 
             <p><i class="fa fa-spin fa-spinner fa-lg"></i><br />
                 <span ng-show="!waitNetwork">loading ...</span>

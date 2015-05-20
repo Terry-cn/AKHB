@@ -52,11 +52,12 @@ module.controller('AppController',['$scope','$rootScope',function($scope,$rootSc
     console.log("AppController",window,window.plugins);
     if(!window.plugins || !window.plugins.pushNotification) return;
     try{
-        console.log("pushNotification start",device.platform);
+       
         pushNotification = window.plugins.pushNotification;
 
         //regist notification
         if ( device.platform == 'android' || device.platform == 'Android' || device.platform == "amazon-fireos" ){
+            console.log("pushNotification start [if]",device.platform);
             pushNotification.register(
             successHandler,
             errorHandler,
@@ -78,6 +79,7 @@ module.controller('AppController',['$scope','$rootScope',function($scope,$rootSc
             //     launchApplicationOnPush: true
             // });
         } else {
+            console.log("pushNotification start [else]",device.platform);
             pushNotification.register(
             tokenHandler,
             errorHandler,
@@ -131,8 +133,8 @@ module.controller('AppController',['$scope','$rootScope',function($scope,$rootSc
 
         //Android and Amazon Fire OS 
         function onNotification(e) {
-           $("#app-status-ul").append('<li>EVENT -> RECEIVED:' + e.event + '</li>');
-
+           //$("#app-status-ul").append('<li>EVENT -> RECEIVED:' + e.event + '</li>');
+            console.log("on Android Notification",e);
             switch( e.event )
             {
             case 'registered':

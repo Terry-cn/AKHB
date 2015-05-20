@@ -105,7 +105,7 @@ module.controller('AppController',['$scope','$rootScope',function($scope,$rootSc
         }
         function sendRegistionId(id){
             console.log("sendRegistionId",id);
-            var url = window.AKHB.config.remoteAddress+'/webservice.php?type=4&deviceid='+AKHB.user.deviceid+'&notificationid='+id;
+            var url = window.AKHB.config.remoteAddress+'/webservice.php?type=4&deviceid='+AKHB.user.deviceid+'&notificationid=' + window.AKHB.config.senderID;
             $.get(url,function(data){
                 console.log('sendRegistionId',id,data);
             })

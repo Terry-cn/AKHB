@@ -37,6 +37,7 @@ AKHB.services.authentication = (function(){
 			return true;
 		};
 		this.isNetworkConnected = function(){
+			return true;
 			return navigator.network && navigator.network.connection && navigator.network.connection.type != Connection.NONE;
 		};
 		this.isWebserviceWorking = function($http,callback){

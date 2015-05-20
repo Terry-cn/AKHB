@@ -225,19 +225,27 @@ AKHB.services.db.DBSync =  (function(){
 			function sendUsage(type,callback){
 				DB.getUsage(type,function(err,data){
 					var request = [];
+
+					if(data.length == 0) {
+						callback(null);
+						return;
+					}
+
 					$.each(data,function(index,_usage){
 						
 						request.push({
 							type:_usage.type,
 							id:AKHB.user.id,
 							content_id:_usage.content_id,
-							date_time:moment(_usage.date_time).format('YYYY-MM-DD')
+							date_time:_usage.date_time
 						});
 					});
-					$.post(url,{
-						type:3,
+					var postdata = {
+						type:type,
 						usage:request
-					},function(res, textStatus, jqXHR){
+					};
+					console.log('sendUsage:',url,JSON.stringify(postdata));
+					$.post(url,postdata,function(res, textStatus, jqXHR){
 
 						if(textStatus=="success"){
 							$.each(data,function(index,_usage){

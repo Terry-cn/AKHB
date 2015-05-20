@@ -52,8 +52,9 @@ module.controller('AppController',['$scope','$rootScope',function($scope,$rootSc
     console.log("AppController",window,window.plugins);
     if(!window.plugins || !window.plugins.pushNotification) return;
     try{
-        console.log("pushNotification start");
+        console.log("pushNotification start",device.platform);
         pushNotification = window.plugins.pushNotification;
+
         //regist notification
         if ( device.platform == 'android' || device.platform == 'Android' || device.platform == "amazon-fireos" ){
             pushNotification.register(
@@ -450,8 +451,9 @@ module.controller('ContentController',['$scope','$http','$templateCache','$sce',
                 $scope.contentHTML = $sce.trustAsHtml('<iframe name="contentFrame" id="content-iframe" src="'+article.content +'" ng-if="article.type==2"></iframe>');
 
                 //$scope.contentHTML = $sce.trustAsHtml('<iframe id="content-iframe" src="http://127.0.0.1" ng-if="article.type==2"></iframe>');
-                $rootScope.$emit("BUSY");
+                $('div.loading').removeClass('ng-hide');
                 setTimeout(function(){
+                   // $rootScope.$emit("BUSY");
                     $('div.loading').addClass('ng-hide');
                 },5000);
                 // console.log($('#content-iframe'));

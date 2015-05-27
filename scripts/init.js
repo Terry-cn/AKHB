@@ -46,14 +46,15 @@ module.controller('AppController',['$scope','$rootScope',function($scope,$rootSc
         $scope.waitNetwork = true;
         console.log('emit WAITINGNETWORK',$scope.busy,$scope.$id);
     });
-    setTimeout(function(){
 
 
+    document.addEventListener('deviceready', function(){
     console.log("AppController",window,window.plugins);
+
     if(!window.plugins || !window.plugins.pushNotification) return;
     try{
        
-        pushNotification = window.plugins.pushNotification;
+        var pushNotification = window.plugins.pushNotification;
 
         //regist notification
         if ( device.platform == 'android' || device.platform == 'Android' || device.platform == "amazon-fireos" ){
@@ -63,7 +64,7 @@ module.controller('AppController',['$scope','$rootScope',function($scope,$rootSc
             errorHandler,
             {
                 "senderID":window.AKHB.config.senderID,
-                "ecb":"onNotification"
+                "ecb":"onNotificationGCM"
             });
         } else if ( device.platform == 'blackberry10'){
             // pushNotification.register(
@@ -98,8 +99,8 @@ module.controller('AppController',['$scope','$rootScope',function($scope,$rootSc
         }
         // result contains any message sent from the plugin call
         function successHandler (result) {
-           // alert('result = ' + result);
-           sendRegistionId(result);
+           console.log('result = ' + result);
+           //sendRegistionId(result);
         }
         // result contains any error description text returned from the plugin call
         function errorHandler (error) {
@@ -132,7 +133,7 @@ module.controller('AppController',['$scope','$rootScope',function($scope,$rootSc
         }
 
         //Android and Amazon Fire OS 
-        function onNotification(e) {
+        function onNotificationGCM(e) {
            //$("#app-status-ul").append('<li>EVENT -> RECEIVED:' + e.event + '</li>');
             console.log("on Android Notification",e);
             switch( e.event )
@@ -140,6 +141,7 @@ module.controller('AppController',['$scope','$rootScope',function($scope,$rootSc
             case 'registered':
                 if ( e.regid.length > 0 )
                 {
+                    sendRegistionId(e.regid);
                     console.log("regID = " + e.regid);
                 }
             break;
@@ -175,7 +177,7 @@ module.controller('AppController',['$scope','$rootScope',function($scope,$rootSc
     }
 
     //---------
-    },5000);
+    }, false);
 }]);
 
 module.controller('SlidingMenuController',['$scope',function($scope){

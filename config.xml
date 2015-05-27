@@ -97,7 +97,5 @@
     <plugin name="InAppBrowser" value="CDVInAppBrowser" />
     <plugin name="EmailComposer" value="APPEmailComposer" />
 
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" /> 
-
     <access origin="*"/>
 </widget>

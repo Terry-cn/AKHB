@@ -91,87 +91,7 @@ module.controller('AppController',['$scope','$rootScope',function($scope,$rootSc
                 "ecb":"onNotificationAPN"
             });
         }
-        function tokenHandler (result) {
-            // Your iOS push server needs to know the token before it can push to this device
-            // here is where you might want to send it the token for later use.
-            //alert('device token = ' + result);
-            sendRegistionId(result);
-        }
-        // result contains any message sent from the plugin call
-        function successHandler (result) {
-           console.log('result = ' + result);
-           //sendRegistionId(result);
-        }
-        // result contains any error description text returned from the plugin call
-        function errorHandler (error) {
-            alert('error = ' + error);
-        }
-        function sendRegistionId(id){
-            console.log("sendRegistionId",id);
-            var url = window.AKHB.config.remoteAddress+'/webservice.php?type=4&deviceid='+AKHB.user.deviceid+'&notificationid=' + window.AKHB.config.senderID;
-            $.get(url,function(data){
-                console.log('sendRegistionId',id,data);
-            })
-        }
-        // iOS
-        function onNotificationAPN (event) {
-            if ( event.alert )
-            {
-                navigator.notification.alert(event.alert);
-            }
-
-            if ( event.sound )
-            {
-                var snd = new Media(event.sound);
-                snd.play();
-            }
-
-            if ( event.badge )
-            {
-                pushNotification.setApplicationIconBadgeNumber(successHandler, errorHandler, event.badge);
-            }
-        }
-
-        //Android and Amazon Fire OS 
-        function onNotificationGCM(e) {
-           //$("#app-status-ul").append('<li>EVENT -> RECEIVED:' + e.event + '</li>');
-            console.log("on Android Notification",e);
-            switch( e.event )
-            {
-            case 'registered':
-                if ( e.regid.length > 0 )
-                {
-                    sendRegistionId(e.regid);
-                    console.log("regID = " + e.regid);
-                }
-            break;
-
-            case 'message':
-                // if this flag is set, this notification happened while we were in the foreground.
-                // you might want to play a sound to get the user's attention, throw up a dialog, etc.
-                if ( e.foreground )
-                {
-
-                    // on Android soundname is outside the payload.
-                    // On Amazon FireOS all custom attributes are contained within payload
-                    var soundfile = e.soundname || e.payload.sound;
-                    // if the notification contains a soundname, play it.
-                    var my_media = new Media("/android_asset/www/"+ soundfile);
-                    my_media.play();
-                }
-                alert('message = '+e.message+' msgcnt = '+e.msgcnt);
-
-            break;
-
-            case 'error':
-               alert('GCM error = '+e.msg);
-            break;
-
-            default:
-                alert('An unknown GCM event has occurred');
-            break;
-          }
-        }
+        
     }catch(ex){
         console.log("Notification error:",ex);
     }
@@ -538,6 +458,91 @@ module.filter('formatTime', function ($sce) {
     }
 
 });
+
+
+function tokenHandler (result) {
+    // Your iOS push server needs to know the token before it can push to this device
+    // here is where you might want to send it the token for later use.
+    //alert('device token = ' + result);
+    sendRegistionId(result);
+}
+// result contains any message sent from the plugin call
+function successHandler (result) {
+   console.log('result = ' + result);
+   //sendRegistionId(result);
+}
+// result contains any error description text returned from the plugin call
+function errorHandler (error) {
+    alert('error = ' + error);
+}
+function sendRegistionId(id){
+    console.log("sendRegistionId",id);
+    var url = window.AKHB.config.remoteAddress+'/webservice.php?type=4&deviceid='+AKHB.user.deviceid+'&notificationid=' + window.AKHB.config.senderID;
+    $.get(url,function(data){
+        console.log('sendRegistionId',id,data);
+    })
+}
+// iOS
+function onNotificationAPN (event) {
+    if ( event.alert )
+    {
+        navigator.notification.alert(event.alert);
+    }
+
+    if ( event.sound )
+    {
+        var snd = new Media(event.sound);
+        snd.play();
+    }
+
+    if ( event.badge )
+    {
+        pushNotification.setApplicationIconBadgeNumber(successHandler, errorHandler, event.badge);
+    }
+}
+
+//Android and Amazon Fire OS 
+function onNotificationGCM(e) {
+   //$("#app-status-ul").append('<li>EVENT -> RECEIVED:' + e.event + '</li>');
+    console.log("on Android Notification",e);
+    switch( e.event )
+    {
+    case 'registered':
+        if ( e.regid.length > 0 )
+        {
+            sendRegistionId(e.regid);
+            console.log("regID = " + e.regid);
+        }
+    break;
+
+    case 'message':
+        // if this flag is set, this notification happened while we were in the foreground.
+        // you might want to play a sound to get the user's attention, throw up a dialog, etc.
+        if ( e.foreground )
+        {
+
+            // on Android soundname is outside the payload.
+            // On Amazon FireOS all custom attributes are contained within payload
+            var soundfile = e.soundname || e.payload.sound;
+            // if the notification contains a soundname, play it.
+            var my_media = new Media("/android_asset/www/"+ soundfile);
+            my_media.play();
+        }
+        alert('message = '+e.message+' msgcnt = '+e.msgcnt);
+
+    break;
+
+    case 'error':
+       alert('GCM error = '+e.msg);
+    break;
+
+    default:
+        alert('An unknown GCM event has occurred');
+    break;
+  }
+}
+
+
 /*
 
 function ClickOpen() {

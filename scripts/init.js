@@ -477,7 +477,7 @@ function errorHandler (error) {
 }
 function sendRegistionId(id){
     console.log("sendRegistionId",id);
-    var url = window.AKHB.config.remoteAddress+'/webservice.php?type=4&deviceid='+AKHB.user.deviceid+'&notificationid=' + window.AKHB.config.senderID;
+    var url = window.AKHB.config.remoteAddress+'/webservice.php?type=4&deviceid='+AKHB.user.deviceid+'&notificationid=' + id;
     $.get(url,function(data){
         console.log('sendRegistionId',id,data);
     })

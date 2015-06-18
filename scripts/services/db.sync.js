@@ -256,19 +256,27 @@ AKHB.services.db.DBSync =  (function(){
 					callback(null);
 				});
 			}
-			async.series([
-				function(callback){
-					sendUsage(1,callback);
-				},
-				function(callback){
-					sendUsage(2,callback);
-				}
-			],function(err){
-				persistence.flush(null,function() {
-				  callback(err);
+			try{
+				async.series([
+					function(callback){
+						sendUsage(1,callback);
+						console.log("Send Use age 1");
+					},
+					function(callback){
+						sendUsage(2,callback);
+						console.log("Send Use age 2");
+					}
+				],function(err){
+					persistence.flush(null,function() {
+					  callback(err);
+					});
+					
 				});
-				
-			});
+			}catch(e){
+				console.log(e);
+				callback(e);
+			}
+			
 		};
 		this.runInBackGround = function(callback){
 			var self = this;

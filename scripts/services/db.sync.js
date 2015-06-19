@@ -280,28 +280,38 @@ AKHB.services.db.DBSync =  (function(){
 		};
 		this.runInBackGround = function(callback){
 			var self = this;
+			console.log("runInBackGround");
 			async.series([
 				function(callback){
+					console.log("syncArticle");
 					self.syncArticle(function(){
+						console.log("syncArticle finish");
 						callback(null);
 					},true);
 				},
 				function(callback){
+					console.log("syncNavigation");
 					self.syncNavigation(function(){
+						console.log("syncNavigation finish");
 						callback(null);
 					},true);
 				},
 				function(callback){
+					console.log("syncMessage");
 					self.syncMessage(function(){
+						console.log("syncMessage finish");
 						callback(null);
 					},true);
 				},
 				function(callback){
+					console.log("syncUsage");
 					self.syncUsage(function(){
+						console.log("syncUsage finish");
 						callback(null);
 					},true);
 				}
 			],function(err){
+				console.log("runInBackGround finish");
 				persistence.flush(null,function() {
 					if(callback && typeof callback == 'function') 
 						callback(err);			 

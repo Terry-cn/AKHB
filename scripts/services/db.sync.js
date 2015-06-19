@@ -106,7 +106,7 @@ AKHB.services.db.DBSync =  (function(){
 							});
 						},
 						function(url,callback){
-							console.log("syncMessage 2");
+							console.log("syncMessage 2",url);
 							$.getJSON(url,function(result){
 								callback(null,result);
 							});

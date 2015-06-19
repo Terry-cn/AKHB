@@ -98,6 +98,7 @@ AKHB.services.db.DBSync =  (function(){
 			try{
 				async.waterfall([
 						function(callback){
+							console.log("syncMessage 1");
 							dbServices.getTableLastUpdateTime('messages',function(err,result){
 								var requestData = Request('messages',AKHB.user,getLastModified(result));
 								var url = remoteAddress+'/webservice.php?'+ decodeURIComponent($.param(requestData));
@@ -105,11 +106,13 @@ AKHB.services.db.DBSync =  (function(){
 							});
 						},
 						function(url,callback){
+							console.log("syncMessage 2");
 							$.getJSON(url,function(result){
 								callback(null,result);
 							});
 						},
 						function(result,callback){
+							console.log("syncMessage 3");
 							if(result.response == 1){    
 								var lastModified;
 								async.each(result.content,function(_message,callback){
@@ -126,6 +129,7 @@ AKHB.services.db.DBSync =  (function(){
 								callback(null,0,result.last_content_synced);
 							}
 						},function(affectCount,lastModified,callback){
+							console.log("syncMessage 4");
 							dbServices.setTableLastUpdateTime(true,'messages',lastModified,function(err,result){
 								console.log('updated messages last_content_synced');
 								callback(false,result,affectCount);
